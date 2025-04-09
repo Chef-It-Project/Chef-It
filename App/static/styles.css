@@ -1,0 +1,176 @@
+
+body.login-body {
+    margin: 0;
+    padding: 0;
+    background-color: #11221f;
+    background-image: url('../static/images/Background.png');
+    background-repeat: repeat;
+    background-size: contain;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Georgia', serif;
+    color: #ffffff;
+    position: relative;
+  }
+  
+  body.login-body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(17, 34, 31, 0.85);
+    z-index: 0;
+  }
+  
+  .login-container {
+    background-color: rgba(23, 55, 48, 0.95);
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .login-title {
+    font-size: 28px;
+    color: #fffbe6;
+    margin-bottom: 24px;
+  }
+  
+  .login-title .emoji {
+    font-size: 24px;
+    margin-left: 8px;
+  }
+  
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+  }
+  
+  button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #f3b340;
+    color: #173730;
+    font-weight: bold;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #e8a62e;
+  }
+  
+  .switch-link {
+    margin-top: 16px;
+    font-size: 14px;
+  }
+  
+  .switch-link a {
+    color: #fefae0;
+    text-decoration: underline;
+  }
+  
+  .flash-msg {
+    background-color: #ffcccc;
+    color: #660000;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  
+    
+  
+    /* This is the CSS for the Home page  */
+    
+  
+    body.chef-home {
+      margin: 0;
+      font-family: 'Georgia', serif;
+      background-color: #1d2b27;
+      display: flex;
+      color: #fff;
+    }
+    
+    .sidebar {
+      width: 240px;
+      background-color: #18342f;
+      padding: 2rem 1.5rem;
+      height: 100vh;
+    }
+    
+    .sidebar .logo {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      color: #fefae0;
+    }
+    
+    .sidebar .menu a {
+      display: block;
+      margin: 1rem 0;
+      color: #fefae0;
+      font-size: 1.1rem;
+      text-decoration: none;
+    }
+    
+    .main-content {
+      flex: 1;
+      padding: 2rem;
+    }
+    
+    .recipe-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+    
+    .recipe-card {
+      background-color: #fdf6e3;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      color: #333;
+    }
+    
+    .recipe-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    
+    .recipe-meta {
+      padding: 1rem;
+    }
+    
+    .recipe-meta h2 {
+      font-size: 1.2rem;
+      margin: 0.5rem 0;
+      color: #1d2b27;
+    }
+    
+    .recipe-meta .tag {
+      display: inline-block;
+      font-size: 0.8rem;
+      color: #fff;
+      background: #18342f;
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+    }
+    
