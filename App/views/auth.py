@@ -41,7 +41,7 @@ def login_action():
         flash('Invalid username or password', 'error')
         return redirect(url_for('auth_views.login_action'))
     
-    response = redirect(url_for('home_views.home'))  # Changed to home route
+    response = redirect(url_for('home_views.home_page'))  # Changed to home route
     flash('Login successful!', 'success')
     set_access_cookies(response, token)
     return response

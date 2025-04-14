@@ -1,33 +1,451 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Chef It | Home</title>
-  <link rel="stylesheet" href="/static/styles.css">
+  <!-- Google Fonts for refined serif typography -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* -------------------------
+       GLOBAL STYLES
+    ------------------------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      font-family: 'Cormorant Garamond', Garamond, serif;
+      background-color: #1d2b27; /* Moody forest green */
+      color: #f5f1e3;
+      height: 100%;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: color 0.3s;
+      cursor: pointer;
+    }
+    a:hover {
+      color: #d4af37; /* Gold hover */
+    }
+    
+    /* -------------------------
+       PAGE LAYOUT
+    ------------------------- */
+    .container {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+    }
+    /* Sidebar styling */
+    .sidebar {
+      width: 270px;
+      background-color: #1d2b27;
+      padding: 20px;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      /* Use flex and margin for spacing links */
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .sidebar .logo {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+    .nav-links a {
+      display: block;
+      font-size: 1.2rem;
+      padding: 8px 12px;
+      border-radius: 5px;
+    }
+    .nav-links a.active {
+      background-color: #d4af37;
+      color: #fff;
+    }
+    
+    /* Main content */
+    .main-content {
+      flex: 1;
+      background-color: #f5f1e3; /* Cream background */
+      color: #1d2b27;
+      padding: 30px;
+      overflow-y: auto;
+    }
+    .header-title {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .header-desc {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+    
+    /* -------------------------
+       RECIPE GRID & CARD STYLES
+    ------------------------- */
+    .recipe-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .recipe-card {
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .recipe-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+    .recipe-card img {
+      display: block;
+      width: 100%;
+      max-width: 200px;
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 1rem;
+    }
+    .recipe-info h2 {
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+      color: #1d2b27;
+    }
+    .recipe-info p {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 0.5rem;
+    }
+    .recipe-info .tag {
+      display: inline-block;
+      background-color: #d4af37;
+      color: #fff;
+      padding: 0.3rem 0.7rem;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+    
+    /* -------------------------
+       MODAL STYLES for Viewing Recipe Details
+    ------------------------- */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 600px;
+      color: #1d2b27;
+      position: relative;
+    }
+    .close-button {
+      font-size: 28px;
+      font-weight: bold;
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      cursor: pointer;
+    }
+    
+    /* -------------------------
+       NEW RECIPE MODAL STYLES
+    ------------------------- */
+    #newRecipeModal .modal-content {
+      max-width: 500px;
+    }
+    #newRecipeModal label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+    #newRecipeModal input[type="text"],
+    #newRecipeModal textarea,
+    #newRecipeModal input[type="file"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+    }
+    #newRecipeModal button {
+      padding: 10px 20px;
+      margin-right: 10px;
+      border: none;
+      background-color: #1d2b27;
+      color: #f5f1e3;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #newRecipeModal button:hover {
+      background-color: #d4af37;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+    }
+  </style>
 </head>
-<body class="chef-home">
-  <div class="sidebar">
-    <h1 class="logo">Chef It</h1>
-    <nav class="menu">
-      <a href="#">Appetizers</a>
-      <a href="#">Main Meals</a>
-      <a href="#">Desserts</a>
-    </nav>
-  </div>
-
-  <div class="main-content">
-    <div class="recipe-grid">
-      {% for recipe in recipes %}
-      <div class="recipe-card">
-        <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="Recipe Image">
-        <div class="recipe-meta">
-          <span class="tag">{{ recipe.category or "Dinner" }}</span>
-          <h2>{{ recipe.title }}</h2>
-          <p>{{ recipe.instructions[:100] }}...</p>
-        </div>
+<body>
+  <div class="container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <h1 class="logo">Chef It</h1>
+      <div class="nav-links">
+        <a data-category="all" class="active">All</a>
+        <a data-category="Breakfast">Breakfast</a>
+        <a data-category="Main Meal">Main Meal</a>
+        <a data-category="Desserts">Desserts</a>
+        <a id="new-recipe-link">Make Your Own Recipe</a>
       </div>
-      {% endfor %}
+    </aside>
+    
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <div class="header-text">
+        <h2 class="header-title">Welcome to Chef It</h2>
+        <p class="header-desc">
+          Discover curated recipes, manage ingredients, and elevate your cooking experience.
+        </p>
+      </div>
+      
+      <!-- Recipe Grid -->
+      <div class="recipe-grid">
+        <!-- Example Recipe Card 1 -->
+        <div class="recipe-card" data-category="Breakfast" data-title="Classic Pancakes">
+          <img src="{{ url_for('static', filename='images/pancakes.png') }}" alt="Classic Pancakes">
+          <div class="recipe-info">
+            <h2>Classic Pancakes</h2>
+            <p>Fluffy, golden pancakes served with fresh butter &amp; syrup.</p>
+            <div class="tag">Breakfast</div>
+          </div>
+          <div class="recipe-details" style="display: none;">
+            <p><strong>Ingredients:</strong> Flour, Milk, Eggs, Butter, Sugar, Baking Powder</p>
+            <p><strong>Instructions:</strong> Mix all dry ingredients, whisk in wet ingredients, pour onto a heated griddle, cook until bubbles form, flip and cook until golden. Serve warm with syrup.</p>
+          </div>
+        </div>
+        <!-- Example Recipe Card 2 -->
+        <div class="recipe-card" data-category="Main Meal" data-title="Scrambled Eggs">
+          <img src="{{ url_for('static', filename='images/eggs.png') }}" alt="Scrambled Eggs">
+          <div class="recipe-info">
+            <h2>Scrambled Eggs</h2>
+            <p>Light and creamy eggs finished with fresh herbs.</p>
+            <div class="tag">Main Meal</div>
+          </div>
+          <div class="recipe-details" style="display: none;">
+            <p><strong>Ingredients:</strong> Eggs, Butter, Salt, Pepper, Chives</p>
+            <p><strong>Instructions:</strong> Beat eggs with a pinch of salt. Melt butter in a pan, add eggs, and stir continuously on low heat until softly set. Garnish with chopped chives.</p>
+          </div>
+        </div>
+        <!-- Example Recipe Card 3 -->
+        <div class="recipe-card" data-category="Desserts" data-title="Pasta Aglio e Olio">
+          <img src="{{ url_for('static', filename='images/pasta.png') }}" alt="Pasta Aglio e Olio">
+          <div class="recipe-info">
+            <h2>Pasta Aglio e Olio</h2>
+            <p>Garlicky pasta tossed with olive oil, chili, and parsley.</p>
+            <div class="tag">Desserts</div>
+          </div>
+          <div class="recipe-details" style="display: none;">
+            <p><strong>Ingredients:</strong> Pasta, Garlic, Olive Oil, Red Pepper Flakes, Parsley</p>
+            <p><strong>Instructions:</strong> Cook pasta al dente. Sauté garlic in olive oil until fragrant, add red pepper flakes, toss with pasta, and garnish with chopped parsley.</p>
+          </div>
+        </div>
+        <!-- New recipes will be appended here dynamically -->
+      </div>
+    </main>
+  </div>
+  
+  <!-- Modal for Viewing Recipe Details -->
+  <div id="recipeModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <div id="modal-body"></div>
     </div>
   </div>
+  
+  <!-- Modal for Creating New Recipe -->
+  <div id="newRecipeModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button new-close-button">&times;</span>
+      <h2>Add Your Own Recipe</h2>
+      <form id="newRecipeForm" enctype="multipart/form-data">
+        <label for="recipeName">Meal Name:</label>
+        <input type="text" id="recipeName" name="recipeName" required>
+        
+        <label for="recipeIngredients">Ingredients (separated by commas):</label>
+        <textarea id="recipeIngredients" name="recipeIngredients" rows="3" required></textarea>
+        
+        <label for="recipeInstructions">Instructions:</label>
+        <textarea id="recipeInstructions" name="recipeInstructions" rows="5" required></textarea>
+        
+        <label for="recipeImage">Meal Image:</label>
+        <input type="file" id="recipeImage" name="recipeImage" accept="image/*">
+        
+        <button type="submit">Submit Recipe</button>
+        <button type="button" id="cancelNewRecipe">Cancel</button>
+      </form>
+    </div>
+  </div>
+  
+  <!-- JavaScript for Filtering, Modal, and New Recipe Addition -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Filtering functionality (skip the new recipe link)
+      const links = document.querySelectorAll(".nav-links a");
+      const cards = document.querySelectorAll(".recipe-card");
+      links.forEach(link => {
+        if(link.id === "new-recipe-link") return; // skip new recipe link
+        link.addEventListener("click", function () {
+          links.forEach(l => { if(l.id !== "new-recipe-link") l.classList.remove("active"); });
+          this.classList.add("active");
+          const category = this.getAttribute("data-category").toLowerCase();
+          cards.forEach(card => {
+            const cardCategory = card.getAttribute("data-category").toLowerCase();
+            card.style.display = (category === "all" || cardCategory === category) ? "block" : "none";
+          });
+        });
+      });
+      
+      // Modal functionality for viewing recipe details
+      const recipeCards = document.querySelectorAll('.recipe-card');
+      const recipeModal = document.getElementById('recipeModal');
+      const modalBody = document.getElementById('modal-body');
+      const closeButton = document.querySelector('.close-button');
+      
+      recipeCards.forEach(card => {
+        card.addEventListener('click', function (e) {
+          // Prevent modal trigger if new recipe modal is open.
+          if(document.getElementById('newRecipeModal').style.display === 'block') return;
+          // In case the click on a child (the card) bubbles up, we assume it should open modal.
+          const details = card.querySelector('.recipe-details').innerHTML;
+          const title = card.getAttribute('data-title');
+          modalBody.innerHTML = '<h2>' + title + '</h2>' + details;
+          recipeModal.style.display = 'block';
+        });
+      });
+      
+      closeButton.addEventListener('click', function () {
+        recipeModal.style.display = 'none';
+      });
+      
+      window.addEventListener('click', function (event) {
+        if (event.target == recipeModal) {
+          recipeModal.style.display = 'none';
+        }
+      });
+      
+      // New Recipe Modal functionality
+      const newRecipeLink = document.getElementById("new-recipe-link");
+      const newRecipeModal = document.getElementById("newRecipeModal");
+      const newCloseButton = document.querySelector(".new-close-button");
+      const cancelNewRecipe = document.getElementById("cancelNewRecipe");
+      const newRecipeForm = document.getElementById("newRecipeForm");
+      
+      newRecipeLink.addEventListener("click", function () {
+        newRecipeModal.style.display = "block";
+      });
+      
+      newCloseButton.addEventListener("click", function () {
+        newRecipeModal.style.display = "none";
+      });
+      
+      cancelNewRecipe.addEventListener("click", function () {
+        newRecipeModal.style.display = "none";
+      });
+      
+      // Handle new recipe form submission: update recipe grid dynamically.
+      newRecipeForm.addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent default form submission
+        
+        // Get the form data
+        const formData = new FormData(newRecipeForm);
+        const recipeName = formData.get("recipeName");
+        const recipeIngredients = formData.get("recipeIngredients");
+        const recipeInstructions = formData.get("recipeInstructions");
+        let recipeImage = formData.get("recipeImage");
+        
+        // For demo purposes, if an image is provided, use its name; otherwise use a default
+        if(recipeImage && recipeImage.name) {
+          recipeImage = recipeImage.name; 
+          // Note: in a production app, you’d handle file uploads via the server.
+        } else {
+          recipeImage = "default_recipe.png"; // Ensure this image exists in your static/images/ folder
+        }
+        
+        // Create a new recipe object (we tag custom recipes as "Custom")
+        const newRecipe = {
+          name: recipeName,
+          ingredients: recipeIngredients,
+          instructions: recipeInstructions,
+          image: recipeImage,
+          tag: "Custom"
+        };
+        
+        // Create new recipe card element
+        const recipeGrid = document.querySelector('.recipe-grid');
+        const newCard = document.createElement("div");
+        newCard.classList.add("recipe-card");
+        newCard.setAttribute("data-category", "Custom");
+        newCard.setAttribute("data-title", newRecipe.name);
+        
+        // Build the inner HTML for the new card. Adjust the image URL as needed.
+        newCard.innerHTML = `
+          <img src="{{ url_for('static', filename='images/') }}${newRecipe.image}" alt="${newRecipe.name}">
+          <div class="recipe-info">
+            <h2>${newRecipe.name}</h2>
+            <p>${newRecipe.instructions}</p>
+            <div class="tag">${newRecipe.tag}</div>
+          </div>
+          <div class="recipe-details" style="display: none;">
+            <p><strong>Ingredients:</strong> ${newRecipe.ingredients}</p>
+            <p><strong>Instructions:</strong> ${newRecipe.instructions}</p>
+          </div>
+        `;
+        // Append new card to the grid
+        recipeGrid.appendChild(newCard);
+        
+        // Add click event to the new card for modal details
+        newCard.addEventListener('click', function () {
+          const details = newCard.querySelector('.recipe-details').innerHTML;
+          const title = newCard.getAttribute('data-title');
+          modalBody.innerHTML = '<h2>' + title + '</h2>' + details;
+          recipeModal.style.display = 'block';
+        });
+        
+        // Close the new recipe modal and reset the form
+        newRecipeModal.style.display = "none";
+        newRecipeForm.reset();
+        
+        // Optionally display a confirmation message
+        alert("Recipe submitted! Your recipe has been added.");
+      });
+    });
+  </script>
 </body>
 </html>
