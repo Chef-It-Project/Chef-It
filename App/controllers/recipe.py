@@ -1,8 +1,8 @@
 from App.models import Recipe, RecipeIngredient, db
 
-def create_recipe(user_id, name, ingredients, instructions):
+def create_recipe(user_id, name, ingredients, instructions, category="Custom"):
     # Create and add the Recipe
-    recipe = Recipe(name, instructions, user_id)
+    recipe = Recipe(name, instructions, user_id,category)
     db.session.add(recipe)
     db.session.commit()
     

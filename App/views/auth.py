@@ -32,18 +32,19 @@ def login_action():
     if request.method == 'GET':
         return render_template('index.html')
     
-    # Handle POST request
+    # Handle POST: get username and password from the login form
     username = request.form.get('username')
     password = request.form.get('password')
-    token = login(username, password)
     
+    token = login(username, password)  # This should return a JWT if authentication is successful
     if not token:
-        flash('Invalid username or password', 'error')
+        flash('Invalid credentials', 'error')
         return redirect(url_for('auth_views.login_action'))
     
-    response = redirect(url_for('home_views.home_page'))  # Changed to home route
-    flash('Login successful!', 'success')
+    response = redirect(url_for('home_views.home_page'))
+    # Set the JWT cookie (if you are using cookie-based JWTs)
     set_access_cookies(response, token)
+    flash('Login successful!', 'success')
     return response
 
 @auth_views.route('/signup', methods=['GET'])
@@ -56,6 +57,7 @@ def logout_action():
     flash("Logged Out!")
     unset_jwt_cookies(response)
     return response
+
 
 '''
 API Routes

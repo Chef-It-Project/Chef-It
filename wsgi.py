@@ -174,6 +174,7 @@ def view_recipe_command(recipe_id):
 
 app.cli.add_command(recipe_cli)
 
+
 '''
 Test Commands Group
 '''
