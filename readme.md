@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="images/logo.png" alt="Logo" width="30%">
+    <img src="images/Logo.png" alt="Logo" width="30%">
 </p>
 
 <p align="center"><h1 align="center">CHEF-IT.GIT</h1></p>
