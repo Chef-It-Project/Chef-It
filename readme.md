@@ -1,6 +1,7 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/ec559a9f6bfd399b82bb44393651661b08aaf7ba/icons/folder-markdown-open.svg" align="center" width="30%">
+    <img src="images/logo.png" alt="Logo" width="30%">
 </p>
+
 <p align="center"><h1 align="center">CHEF-IT.GIT</h1></p>
 <p align="center">
 	<em><code>❯ REPLACE-ME</code></em>
