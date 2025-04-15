@@ -8,13 +8,14 @@ from App.main import create_app
 from App.controllers import (
     create_user, get_all_users_json, get_all_users, initialize,
     add_ingredient_to_user, remove_ingredient_from_user, get_user_inventory,
-    create_recipe, get_user_recipes, get_recipes_with_missing_ingredients
+    create_recipe, get_user_recipes, get_recipes_with_missing_ingredients,get_user_inventory_quantities 
 )
 
+# Create the Flask application
 app = create_app()
 migrate = get_migrate(app)
 
-# Database initialization
+# Database initialization command
 @app.cli.command("init", help="Initialize the database with test data")
 def initialize_db():
     initialize()
@@ -52,14 +53,34 @@ Inventory Commands Group
 '''
 inventory_cli = AppGroup('inventory', help='Inventory management commands')
 
+@inventory_cli.command("list", help="List a user's inventory with quantities")
+@click.argument("user_id", type=int)
+def list_inventory_quantities_command(user_id):
+    quantities = get_user_inventory_quantities(user_id)
+    if quantities:
+        for ingredient, count in quantities.items():
+            print(f"{ingredient}: {count}")
+    else:
+        print("No inventory items found for user", user_id)
+
 @inventory_cli.command("add", help="Add ingredient to user's inventory")
 @click.argument("user_id", type=int)
 @click.argument("ingredient")
 def add_ingredient_command(user_id, ingredient):
-    if add_ingredient_to_user(user_id, ingredient):
+    added = add_ingredient_to_user(user_id, ingredient)
+    if added:
         print(f"Added '{ingredient}' to user {user_id}'s inventory")
+
+@inventory_cli.command("remove", help="Remove ingredient(s) from a user's inventory")
+@click.argument("user_id", type=int)
+@click.argument("ingredient")
+@click.option("--quantity", type=int, default=1, help="Quantity to remove (default: 1)")
+def remove_ingredient_command(user_id, ingredient, quantity):
+    removed = remove_ingredient_from_user(user_id, ingredient, quantity)
+    if removed:
+        print(f"Removed {removed} unit(s) of '{ingredient}' from user {user_id}'s inventory.")
     else:
-        print("Failed to add ingredient")
+        print(f"No '{ingredient}' found in user {user_id}'s inventory.")
 
 @inventory_cli.command("remove", help="Remove ingredient from inventory")
 @click.argument("user_id", type=int)
@@ -68,7 +89,9 @@ def remove_ingredient_command(user_id, ingredient):
     if remove_ingredient_from_user(user_id, ingredient):
         print(f"Removed '{ingredient}' from user {user_id}'s inventory")
     else:
-        print("Failed to remove ingredient")
+        print("Failed to remove ingredient (it may not exist)")
+
+
 
 app.cli.add_command(inventory_cli)
 
@@ -80,7 +103,7 @@ recipe_cli = AppGroup('recipe', help='Recipe management commands')
 @recipe_cli.command("create", help="Create a new recipe")
 @click.argument("user_id", type=int)
 @click.argument("name")
-@click.argument("ingredients")  # Comma-separated
+@click.argument("ingredients")  # Comma-separated list
 @click.argument("instructions")
 def create_recipe_command(user_id, name, ingredients, instructions):
     ingredients_list = [i.strip() for i in ingredients.split(',')]
@@ -100,6 +123,54 @@ def missing_ingredients_command(user_id):
             print("Missing:", ", ".join(recipe['missing_ingredients']))
         else:
             print("All ingredients available")
+
+# New command: Search for recipes by keyword
+@recipe_cli.command("search", help="Search recipes by keyword in name or instructions")
+@click.argument("query")
+def search_recipe_command(query):
+    from App.controllers.recipe import search_recipes  # Ensure this function exists in App/recipe.py
+    recipes = search_recipes(query)
+    if recipes:
+        for recipe in recipes:
+            print(recipe.to_json())
+    else:
+        print("No matching recipes found.")
+
+@recipe_cli.command("view", help="View recipe details by ID with required quantities and missing amounts")
+@click.argument("recipe_id", type=int)
+def view_recipe_command(recipe_id):
+    from App.controllers.recipe import get_recipe_by_id
+    recipe = get_recipe_by_id(recipe_id)
+    if not recipe:
+        print("Recipe not found.")
+        return
+
+    r = recipe.to_json()
+    # Use the recipe owner's id to check inventory
+    owner_id = r['user_id']
+    from App.controllers.inventory import get_user_inventory_quantities
+    inventory_qty = get_user_inventory_quantities(owner_id)
+
+    print("\n------------------------------")
+    print(f"Recipe ID: {r['id']}")
+    print(f"Name: {r['name']}\n")
+    print("Instructions:")
+    print(f"{r['instructions']}\n")
+    print("Ingredients and Requirements:")
+    for i, ing in enumerate(r['ingredients'], start=1):
+        ing_name = ing['name'].capitalize()
+        req_qty = ing.get('quantity_required', 1)
+        available = inventory_qty.get(ing['name'].lower(), 0)
+        if available < req_qty:
+            missing = req_qty - available
+            print(f"  {i}. {ing_name} (Need {missing} more)")
+        else:
+            print(f"  {i}. {ing_name} (Have enough)")
+    print("------------------------------\n")
+
+
+
+
 
 app.cli.add_command(recipe_cli)
 

@@ -11,7 +11,7 @@ def initialize():
     db.session.add(bob)
     db.session.commit()
     
-    # Add inventory items
+    # Add inventory items (each record is one unit)
     inventory_items = [
         'flour', 'sugar', 'eggs', 'milk',
         'butter', 'salt', 'pepper', 'olive oil'
@@ -19,7 +19,7 @@ def initialize():
     for item in inventory_items:
         db.session.add(UserFoodList(bob.id, item))
     
-    # Create sample recipes
+    # Create sample recipes with required ingredient quantities
     recipes = [
         {
             'name': 'Classic Pancakes',
@@ -47,11 +47,38 @@ def initialize():
         db.session.add(recipe)
         db.session.commit()
         
+        # Set required quantities based on the recipe
+        if recipe_data['name'] == 'Classic Pancakes':
+            quantities = {
+                'flour': 1,           # e.g., one bag or unit
+                'eggs': 5,
+                'milk': 1,
+                'butter': 1,
+                'baking powder': 1,
+                'sugar': 1
+            }
+        elif recipe_data['name'] == 'Scrambled Eggs':
+            quantities = {
+                'eggs': 3,
+                'butter': 1,
+                'salt': 1,
+                'pepper': 1
+            }
+        elif recipe_data['name'] == 'Pasta Aglio e Olio':
+            quantities = {
+                'pasta': 1,
+                'garlic': 2,
+                'olive oil': 1,
+                'red pepper flakes': 1,
+                'parsley': 1
+            }
+        else:
+            # Default to 1 for any unspecified ingredient
+            quantities = {ingredient: 1 for ingredient in recipe_data['ingredients']}
+        
         for ingredient in recipe_data['ingredients']:
-            db.session.add(RecipeIngredient(
-                recipe_id=recipe.id,
-                name=ingredient
-            ))
+            req_qty = quantities.get(ingredient, 1)
+            db.session.add(RecipeIngredient(recipe.id, ingredient, quantity_required=req_qty))
     
     db.session.commit()
     return True
