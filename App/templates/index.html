@@ -1,31 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Chef It</title>
-    <link rel="stylesheet" href="/static/styles.css">
-  </head>
-<body class="login-body">
-  <div class="login-container">
-    <h2 class="login-title">Welcome Back <span class="emoji">🍽️</span></h2>
-    <form action="{{ url_for('auth_views.login_action') }}" method="POST">
-      {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-          <div class="flash-messages">
-            {% for category, message in messages %}
-              <div class="flash-msg {{ category }}">
-                {{ message }}
-              </div>
-            {% endfor %}
-          </div>
-        {% endif %}
-      {% endwith %}
-      <input type="text" name="username" placeholder="Username" required value="{{ request.form.username if request.form.username }}">
-      <input type="password" name="password" placeholder="Password" required>
-      <button type="submit">Log In</button>
-    </form>
-    <p class="switch-link">Don't have an account? <a href="{{ url_for('auth_views.signup_action') }}">Sign up</a></p>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | Chef It</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body,
+    html {
+      height: 100%;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+      background: url('https://images.unsplash.com/photo-1543353071-10c8ba85a904?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Zm9vZCUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D') no-repeat center center/cover;
+      flex-direction: row-reverse;
+    }
+
+    .login-section {
+      background-color: rgba(255, 255, 255, 0.85);
+      width: 100%;
+      max-width: 400px;
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .login-section h2 {
+      margin-bottom: 1.5rem;
+      color: #333;
+      text-align: center;
+    }
+
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: #007BFF;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-weight: bold;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .login-btn {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      width: 100%;
+      background-color: #007BFF;
+      border: none;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .switch-link {
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    .flash-messages {
+      margin-bottom: 1rem;
+    }
+
+    .flash-msg {
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+
+    .flash-msg.error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+
+    .flash-msg.success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .login-section {
+        width: 100%;
+        max-width: 100%;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="login-section">
+      <div class="logo-container">
+        <div class="logo">L</div>
+      </div>
+      <h2>Welcome Back <span class="emoji">🍽️</span></h2>
+      <form action="{{ url_for('auth_views.login_action') }}" method="POST">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-messages">
+              {% for category, message in messages %}
+                <div class="flash-msg {{ category }}">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+        <div class="form-group">
+          <input type="text" name="username" placeholder="Username" required value="{{ request.form.username if request.form.username }}">
+        </div>
+        <div class="form-group">
+          <input type="password" name="password" placeholder="Password" required>
+        </div>
+        <button type="submit" class="login-btn">Log In</button>
+      </form>
+      <p class="switch-link">Don't have an account? <a href="{{ url_for('auth_views.signup_action') }}">Sign up</a></p>
+    </div>
   </div>
 </body>
+
 </html>
