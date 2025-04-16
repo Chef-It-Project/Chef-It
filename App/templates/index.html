@@ -6,100 +6,26 @@
     <title>Login | Chef It</title>
     <link rel="stylesheet" href="/static/styles.css" />
     <style>
-      body.login-body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        min-height: 100vh;
-        background: url("https://images.unsplash.com/photo-1543353071-10c8ba85a904?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Zm9vZCUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D")
-          no-repeat center center/cover;
-        padding-top: 60px;
-        /* space from the top */
-      }
-
       .logo-wrapper {
-        margin-bottom: 20px;
         text-align: center;
+        margin-top: 40px;
       }
 
       .logo-wrapper img {
-        width: 120px;
+        width: 150px;
         height: auto;
       }
 
       .login-container {
-        background-color: rgba(255, 255, 255, 0.9);
-        padding: 2rem;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        width: 100%;
-        max-width: 400px;
-      }
-
-      .login-title {
-        text-align: center;
-        margin-bottom: 1.5rem;
-      }
-
-      .flash-messages {
-        margin-bottom: 1rem;
-      }
-
-      .flash-msg {
-        padding: 10px;
-        border-radius: 5px;
-        text-align: center;
-        margin-bottom: 0.5rem;
-      }
-
-      .flash-msg.error {
-        background-color: #f8d7da;
-        color: #721c24;
-      }
-
-      .flash-msg.success {
-        background-color: #d4edda;
-        color: #155724;
-      }
-
-      input[type="text"],
-      input[type="password"] {
-        width: 100%;
-        padding: 0.6rem;
-        margin-bottom: 1rem;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-      }
-
-      button {
-        width: 100%;
-        padding: 0.7rem;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        font-weight: bold;
-        cursor: pointer;
-      }
-
-      .switch-link {
-        margin-top: 1rem;
-        text-align: center;
+        margin-top: 20px; /* Adjust this to push it lower */
       }
     </style>
   </head>
-
   <body class="login-body">
-    <!-- Logo section -->
     <div class="logo-wrapper">
-      <img
-        src="{{ url_for('static', filename='images/2.png') }}"
-        alt="Chef It Logo"
-      />
+      <img src="{{ url_for('static', filename='2.png') }}" alt="Chef It Logo" />
     </div>
 
-    <!-- Login card -->
     <div class="login-container">
       <h2 class="login-title">Welcome Back <span class="emoji">🍽️</span></h2>
       <form action="{{ url_for('auth_views.login_action') }}" method="POST">
