@@ -28,7 +28,7 @@
       }
 
       .login-container {
-        background-color: rgba(22,57,67,255);
+        background-color: rgba(22, 57, 67, 255);
         padding: 2.5rem;
         border-radius: 10px;
         max-width: 400px;
@@ -103,9 +103,15 @@
   <body class="login-body">
     <div class="login-container">
       <div class="logo-inside-card">
-          <img src="{{ url_for('static', filename='images/2.png') }}" alt="Chef It Logo">
+        <img
+          src="{{ url_for('static', filename='2.png') }}"
+          alt="Chef It Logo"
+          style="width: 160px; height: auto"
+        />
       </div>
-      <h2 class="login-title">Welcome Back <span class="emoji">🍽️</span></h2>
+      <h2 class="login-title" style="color: white">
+        Welcome Back <span class="emoji">🍽️</span>
+      </h2>
       <form action="{{ url_for('auth_views.login_action') }}" method="POST">
         {% with messages = get_flashed_messages(with_categories=true) %} {% if
         messages %}
