@@ -103,9 +103,7 @@
   <body class="login-body">
     <div class="login-container">
       <div class="logo-inside-card">
-        <img
           <img src="{{ url_for('static', filename='images/2.png') }}" alt="Chef It Logo">
-        />
       </div>
       <h2 class="login-title">Welcome Back <span class="emoji">🍽️</span></h2>
       <form action="{{ url_for('auth_views.login_action') }}" method="POST">
