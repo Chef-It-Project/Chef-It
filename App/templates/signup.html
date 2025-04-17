@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang ="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign Up | Chef It</title>
+        <link rel="stylesheet" href="/static/style.css">
+        <style>
+            * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+              font-family: Arial, sans-serif;
+            }
+      
+            body,
+            html {
+              height: 100%;
+            }
+      
+            body.signup-body {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 100vh;
+              background: url("https://images.unsplash.com/photo-1543353071-10c8ba85a904?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Zm9vZCUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D")
+                no-repeat center center/cover;
+            }
+      
+            .signup-container {
+              background-color: rgba(22, 57, 67, 255);
+              padding: 2.5rem;
+              border-radius: 10px;
+              max-width: 400px;
+              width: 100%;
+              box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            }
+      
+            .logo-inside-card {
+              display: flex;
+              justify-content: center;
+              margin-bottom: 20px;
+            }
+      
+            .logo-inside-card img {
+              width: 120px;
+              height: auto;
+            }
+      
+            .signup-title {
+              text-align: center;
+              margin-bottom: 1.5rem;
+              color: white;
+            }
+      
+            input[type="text"],
+            input[type="password"] {
+              width: 100%;
+              padding: 0.75rem;
+              margin-bottom: 1rem;
+              border-radius: 5px;
+              border: 1px solid #ccc;
+            }
+      
+            button[type="submit"] {
+              width: 100%;
+              padding: 0.75rem;
+              background-color: #007bff;
+              color: white;
+              border: none;
+              border-radius: 5px;
+              font-weight: bold;
+              cursor: pointer;
+            }
+      
+            .switch-link {
+              text-align: center;
+              margin-top: 1rem;
+            }
+      
+            .flash-messages {
+              margin-bottom: 1rem;
+            }
+      
+            .flash-msg {
+              padding: 0.5rem;
+              border-radius: 4px;
+              margin-bottom: 0.5rem;
+              font-size: 0.9rem;
+              color: white;
+            }
+      
+            .flash-msg.error {
+              background-color: #dc3545;
+            }
+      
+            .flash-msg.success {
+              background-color: #28a745;
+            }
+          </style>
+    </head>
+    <body class = "signup-body">
+        <div class = "signup-container">
+            <div class = "logo-inside-card">
+                <img
+                    src = "{{url_for('static', filename='images/2.png')}}" 
+                    alt = "Chef It Logo">
+                />
+            </div>
+            <h2 class = "signup-title">
+                Create Account <span class = "emoji">👨‍🍳</span>
+            </h2>
+            <form action = "{{url_for('auth_views.signup_action')}}" method = "POST">
+                {% with messages = get_flashed_messages(with_categories=true)%}
+                {% if messages %}
+                <div class = "flash-messages">
+                    {% for category, message in messages %}
+                    <div class = "flash-msg {{category}}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+                <input
+                    type = "text"
+                    name = "username"
+                    placeholder = "Username"
+                    required
+                    value = "{{ request.form.username if request.form.username }}"
+                />
+                <input
+                    type = "password"
+                    name = "password"
+                    placeholder = "Password"
+                    required
+                />
+                <input
+                    type = "password"
+                    name = "confirm_password"
+                    placeholder = "Confirm Password"
+                    required
+                />
+                <button type="submit">Sign Up</button>
+            </form>
+            <p class="switch-link">
+                Already have an account?
+                <a href="{{url_for('auth_views.login_action')}}">Login</a>
+            </p>
+        </div>
+    </body>
+</html>
